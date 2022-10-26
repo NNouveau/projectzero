@@ -180,7 +180,7 @@ GameObject:
   - component: {fileID: 424436370}
   - component: {fileID: 424436369}
   - component: {fileID: 424436368}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -722,7 +722,7 @@ MonoBehaviour:
   rb: {fileID: 0}
   groundLayer:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 64
   runSpeed: 8
   jumpStr: 10
   fallMultiplier: 5
