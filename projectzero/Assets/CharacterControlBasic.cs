@@ -1,6 +1,7 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class CharacterControlBasic : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CharacterControlBasic : MonoBehaviour
 
 
     [Header("Movements")]
-    public float runSpeed = 8f, jumpStr = 10f, fallMultiplier = 5f, gravity = 1f, jumpDelay = 0.25f;
+    public float runSpeed = 8f, jumpStr = 10f, fallMultiplier = 5f, gravity = 1f, jumpDelay = 0.25f,ACC = 9f,DCC =9f, velPower =1.2f;
     private float jumpTimer;
     private bool face = true;
     public Vector3 velocity;
@@ -37,7 +38,7 @@ public class CharacterControlBasic : MonoBehaviour
         onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLenght, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLenght, groundLayer);
         if (Input.GetKey(KeyCode.W))
         {
-            jumpTimer = Time.time + jumpDelay;
+            //jumpTimer = Time.time + jumpDelay;
         }
 
     }
@@ -46,9 +47,12 @@ public class CharacterControlBasic : MonoBehaviour
     //For some optimization
     private void FixedUpdate()
     {
+        velocity.x = rb.velocity.x; //Kaldırılacak
+        velocity.y = rb.velocity.y; //Kaldırılacak
+
         modifyPhysics();
         run(direction.x);
-        if (jumpTimer > Time.time && onGround)
+        if (Input.GetKey(KeyCode.W) && onGround) //(jumpTimer > Time.time && onGround)
         {
             jump();
         }
@@ -67,8 +71,13 @@ public class CharacterControlBasic : MonoBehaviour
     //Running function
     public void run(float horizontal)
     {
-        velocity = new Vector3(Input.GetAxis("Horizontal"), 0f);
-        transform.position += velocity * runSpeed * Time.deltaTime;
+        float targetSpeed    = horizontal * runSpeed;
+        float speedDif       = targetSpeed - rb.velocity.x;
+        float accelRate      = (Mathf.Abs(targetSpeed) > 0.00f) ? ACC : DCC;
+        float movement       = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
+        rb.AddForce(movement * Vector2.right);
+
+        
         //animator.SetFloat("HorizontalSpeed", Mathf.Abs(velocity.x));
         if ((horizontal > 0 && !face) || (horizontal < 0 && face))
         {
@@ -98,7 +107,7 @@ public class CharacterControlBasic : MonoBehaviour
         else
         {
             rb.gravityScale = gravity;
-            //rb.drag = linearDrag * 0.15f;
+            rb.drag = linearDrag * 0.15f;
             if (rb.velocity.y < 0)
             {
                 rb.gravityScale = gravity * fallMultiplier;
