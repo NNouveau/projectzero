@@ -1,42 +1,129 @@
-
-using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
 public class CharacterControlBasic : MonoBehaviour
 {
-    // Start is called before the first frame update
-    public float MovementSpeed = 6;
-    public float JumpForce = 4;
-    private Rigidbody2D _rigidbody;
-    bool facingRight = true;
+    [Header("Components")]
+    public Rigidbody2D rb;
+    //public Animator animator;
+    public LayerMask groundLayer;
+
+
+    [Header("Movements")]
+    public float runSpeed = 8f, jumpStr = 10f, fallMultiplier = 5f, gravity = 1f, jumpDelay = 0.25f;
+    private float jumpTimer;
+    private bool face = true;
+    public Vector3 velocity;
+    public Vector2 direction;
+
+    [Header("Collision")]
+    public bool onGround = false;
+    public float groundLenght = 1f;
+    public Vector3 colliderOffset;
+
+    [Header("Physics")]
+    public float linearDrag = 4f;
+
 
     void Start()
     {
-        _rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        var movement = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(movement, 0, 0) * Time.deltaTime * MovementSpeed;
-        if (Input.GetButtonDown("Jump") && Mathf.Abs(_rigidbody.velocity.y) <0.001f)
+        direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLenght, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLenght, groundLayer);
+        if (Input.GetKey(KeyCode.W))
         {
-            _rigidbody.AddForce(new Vector2(0, JumpForce), ForceMode2D.Impulse);
+            jumpTimer = Time.time + jumpDelay;
         }
 
-        if(movement<0 && facingRight)
+    }
+
+
+    //For some optimization
+    private void FixedUpdate()
+    {
+        modifyPhysics();
+        run(direction.x);
+        if (jumpTimer > Time.time && onGround)
         {
-            flip();
+            jump();
         }
-        else if (movement>0 && !facingRight)
+        //animator.SetFloat("VerticalSpeed", rb.velocity.y);
+        if (onGround)
+        {
+            //animator.SetBool("isJumping", false);
+        }
+        else if (!onGround)
+        {
+            //animator.SetBool("isJumping", true);
+        }
+    }
+
+
+    //Running function
+    public void run(float horizontal)
+    {
+        velocity = new Vector3(Input.GetAxis("Horizontal"), 0f);
+        transform.position += velocity * runSpeed * Time.deltaTime;
+        //animator.SetFloat("HorizontalSpeed", Mathf.Abs(velocity.x));
+        if ((horizontal > 0 && !face) || (horizontal < 0 && face))
         {
             flip();
         }
     }
 
+
+    //Jumping function
+    public void jump()
+    {
+        //animator.SetTrigger("jumped");
+        //animator.SetBool("isJumping", true);
+        rb.velocity = new Vector2(rb.velocity.x, 0);
+        rb.AddForce(Vector2.up * jumpStr, ForceMode2D.Impulse);
+        jumpTimer = 0;
+    }
+
+
+    //For better jumping
+    void modifyPhysics()
+    {
+        if (onGround)
+        {
+            rb.gravityScale = 0;
+        }
+        else
+        {
+            rb.gravityScale = gravity;
+            //rb.drag = linearDrag * 0.15f;
+            if (rb.velocity.y < 0)
+            {
+                rb.gravityScale = gravity * fallMultiplier;
+            }
+            else if ((rb.velocity.y > 0) && !Input.GetKey(KeyCode.W))
+            {
+                rb.gravityScale = gravity * (fallMultiplier / 2);
+            }
+        }
+    }
+
+
+    //Fliping character function
     void flip()
     {
-        facingRight = !facingRight;
+        face = !face;
         transform.Rotate(0f, 180f, 0f);
+    }
+
+
+    //Drawing hitbox function
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position + colliderOffset, transform.position + colliderOffset + Vector3.down * groundLenght);
+        Gizmos.DrawLine(transform.position - colliderOffset, transform.position - colliderOffset + Vector3.down * groundLenght);
     }
 }
