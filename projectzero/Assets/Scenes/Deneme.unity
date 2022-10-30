@@ -1016,7 +1016,7 @@ MonoBehaviour:
   runSpeed: 12
   jumpStr: 9
   fallMultiplier: 20
-  gravity: 0
+  gravity: 1
   jumpDelay: 0.25
   ACC: 9
   DCC: 9
