@@ -6,7 +6,7 @@ public class Movements : MonoBehaviour
 {
     [Header("Components")]
     public Rigidbody2D rb;
-    //public Animator animator;
+    public Animator animator;
     public LayerMask groundLayer;
 
 
@@ -33,6 +33,8 @@ public class Movements : MonoBehaviour
 
     void Update()
     {
+        velocity.x = rb.velocity.x;
+        velocity.y = rb.velocity.y;
         direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLenght, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLenght, groundLayer);
         if (Input.GetKey(KeyCode.W))
@@ -52,14 +54,14 @@ public class Movements : MonoBehaviour
         {
             jump();
         }
-        //animator.SetFloat("VerticalSpeed", rb.velocity.y);
-        if (onGround)
+        animator.SetFloat("VerticalSpeed", rb.velocity.y);
+        if (!onGround)
         {
-            //animator.SetBool("isJumping", false);
+            animator.SetBool("onGround", false);
         }
-        else if (!onGround)
+        else if (onGround)
         {
-            //animator.SetBool("isJumping", true);
+            animator.SetBool("onGround", true);
         }
     }
 
@@ -69,7 +71,7 @@ public class Movements : MonoBehaviour
     {
         velocity = new Vector3(Input.GetAxis("Horizontal"), 0f);
         transform.position += velocity * runSpeed * Time.deltaTime;
-        //animator.SetFloat("HorizontalSpeed", Mathf.Abs(velocity.x));
+        animator.SetFloat("HorizontalSpeed", Mathf.Abs(velocity.x));
         if ((horizontal > 0 && !face) || (horizontal < 0 && face))
         {
             flip();
@@ -80,8 +82,6 @@ public class Movements : MonoBehaviour
     //Jumping function
     public void jump()
     {
-        //animator.SetTrigger("jumped");
-        //animator.SetBool("isJumping", true);
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(Vector2.up * jumpStr, ForceMode2D.Impulse);
         jumpTimer = 0;
