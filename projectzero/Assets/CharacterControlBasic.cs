@@ -1,15 +1,40 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
-
+using UnityEngine.UIElements;
 
 public class CharacterControlBasic : MonoBehaviour
 {
     [Header("Components")]
     public Rigidbody2D rb;
     //public Animator animator;
+    
     public LayerMask groundLayer;
 
+    //Variables for Rope
+
+    public Rigidbody2D rbfr;
+    private HingeJoint2D hj;
+    public float RopePushForce= 10f;
+    public bool attached = false;
+    public Transform attachedTo;
+    private GameObject disregard;
+    public GameObject pulleySelected = null;
+    
+    //Code for rope mechanic
+
+    void Awake()
+    {
+        rbfr = gameObject.GetComponent<Rigidbody2D>();
+        hj   = gameObject.GetComponent<HingeJoint2D>();
+    }
+        
+
+
+    
+    //Codes and variables for character mechanic
 
     [Header("Movements")]
     public float runSpeed = 8f, jumpStr = 10f, fallMultiplier = 5f, gravity = 1f, jumpDelay = 0.25f,ACC = 9f,DCC =9f, velPower =1.2f;
@@ -34,6 +59,8 @@ public class CharacterControlBasic : MonoBehaviour
 
     void Update()
     {
+
+
         direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLenght, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLenght, groundLayer);
         if (Input.GetKey(KeyCode.W))
@@ -41,14 +68,118 @@ public class CharacterControlBasic : MonoBehaviour
             //jumpTimer = Time.time + jumpDelay;
         }
 
+        CheckKeyboardInputs();
+        //CheckPulleyInputs();
+
     }
 
+    //Codes for rope mechanic
+
+    void CheckKeyboardInputs()
+    {
+        if(Input.GetKey("a") || Input.GetKey("left"))
+        {
+            if(attached)
+            {
+                rbfr.AddRelativeForce(new Vector3(-1, 0, 0) * RopePushForce);
+            }
+        }
+        if(Input.GetKey("d") || Input.GetKey("right"))
+        {
+            if(attached)
+            {
+                rbfr.AddRelativeForce(new Vector3(1, 0, 0) * RopePushForce);
+            }
+        }
+
+        if((Input.GetKeyDown("w") || Input.GetKeyDown("up")) && attached)
+        {
+            Slide(1);
+        }
+
+        if ((Input.GetKeyDown("s") || Input.GetKeyDown("down")) && attached)
+        {
+            Slide(-1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Detach();
+        }
+    }
+
+    public  void  Attach(Rigidbody2D ropeBone)
+    {
+        ropeBone.gameObject.GetComponent<RopeSegment>().isPlayerAttached = true;
+        hj.connectedBody = ropeBone;
+        hj.enabled = true;
+        attached = true;
+        attachedTo = ropeBone.gameObject.transform.parent;
+    }
+
+    void Detach()
+    {
+        hj.connectedBody.gameObject.GetComponent<RopeSegment>().isPlayerAttached = false;
+        attached = false;
+        hj.enabled=false;
+        hj.connectedBody=null;
+    }
+
+    public void Slide(int direction)
+    {
+        RopeSegment myConnection = hj.connectedBody.gameObject.GetComponent<RopeSegment>();
+        GameObject newSeg = null;
+
+        if(direction>0)
+        {
+            if(myConnection.connectedAbove != null)
+            {
+                if(myConnection.connectedAbove.gameObject.GetComponent<RopeSegment>() != null)
+                {
+                    newSeg = myConnection.connectedAbove;
+                }
+            }
+        }
+        else
+        {
+            if(myConnection.connectedBelow != null)
+            {
+                newSeg =myConnection.connectedBelow;
+            }
+        }
+    }
+
+    void OnTriggerEnter2d(Collider2D collision)
+    {
+        if(!attached)
+        {
+            if(collision.gameObject.tag == "Rope")
+            {
+                if(attachedTo != collision.gameObject.transform.parent)
+                {
+                    if(disregard == null || collision.gameObject.transform.parent.gameObject != disregard)
+                    {
+                        Attach(collision.gameObject.GetComponent<Rigidbody2D>());
+                    }
+                }
+            }
+        }
+    }
+
+  /*  void CheckPulleyInputs()
+    {
+        if(Input.GetMouseButtonDown(0))
+        {
+
+        }
+    }
+  */
 
     //For some optimization
     private void FixedUpdate()
     {
-        velocity.x = rb.velocity.x; //Kaldırılacak
-        velocity.y = rb.velocity.y; //Kaldırılacak
+        velocity.x = rb.velocity.x; //Will be removed
+        velocity.y = rb.velocity.y; //Will be removed
 
         modifyPhysics();
         run(direction.x);
