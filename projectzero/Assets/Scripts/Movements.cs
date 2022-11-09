@@ -49,7 +49,11 @@ public class Movements : MonoBehaviour
     private void FixedUpdate()
     {
         modifyPhysics();
-        run(direction.x);
+        if (!gameObject.GetComponent<Abilities>().isAttached)
+        {
+            run(direction.x);
+        }
+        
         if (jumpTimer > Time.time&& onGround)
         {
             jump();
