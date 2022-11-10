@@ -68,103 +68,13 @@ public class CharacterControlBasic : MonoBehaviour
             //jumpTimer = Time.time + jumpDelay;
         }
 
-        CheckKeyboardInputs();
-        //CheckPulleyInputs();
-
     }
 
     //Codes for rope mechanic
 
-    void CheckKeyboardInputs()
-    {
-        if(Input.GetKey("a") || Input.GetKey("left"))
-        {
-            if(attached)
-            {
-                rbfr.AddRelativeForce(new Vector3(-1, 0, 0) * RopePushForce);
-            }
-        }
-        if(Input.GetKey("d") || Input.GetKey("right"))
-        {
-            if(attached)
-            {
-                rbfr.AddRelativeForce(new Vector3(1, 0, 0) * RopePushForce);
-            }
-        }
+   
 
-        if((Input.GetKeyDown("w") || Input.GetKeyDown("up")) && attached)
-        {
-            Slide(1);
-        }
 
-        if ((Input.GetKeyDown("s") || Input.GetKeyDown("down")) && attached)
-        {
-            Slide(-1);
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Detach();
-        }
-    }
-
-    public  void  Attach(Rigidbody2D ropeBone)
-    {
-        ropeBone.gameObject.GetComponent<RopeSegment>().isPlayerAttached = true;
-        hj.connectedBody = ropeBone;
-        hj.enabled = true;
-        attached = true;
-        attachedTo = ropeBone.gameObject.transform.parent;
-    }
-
-    void Detach()
-    {
-        hj.connectedBody.gameObject.GetComponent<RopeSegment>().isPlayerAttached = false;
-        attached = false;
-        hj.enabled=false;
-        hj.connectedBody=null;
-    }
-
-    public void Slide(int direction)
-    {
-        RopeSegment myConnection = hj.connectedBody.gameObject.GetComponent<RopeSegment>();
-        GameObject newSeg = null;
-
-        if(direction>0)
-        {
-            if(myConnection.connectedAbove != null)
-            {
-                if(myConnection.connectedAbove.gameObject.GetComponent<RopeSegment>() != null)
-                {
-                    newSeg = myConnection.connectedAbove;
-                }
-            }
-        }
-        else
-        {
-            if(myConnection.connectedBelow != null)
-            {
-                newSeg =myConnection.connectedBelow;
-            }
-        }
-    }
-
-    void OnTriggerEnter2d(Collider2D collision)
-    {
-        if(!attached)
-        {
-            if(collision.gameObject.tag == "Rope")
-            {
-                if(attachedTo != collision.gameObject.transform.parent)
-                {
-                    if(disregard == null || collision.gameObject.transform.parent.gameObject != disregard)
-                    {
-                        Attach(collision.gameObject.GetComponent<Rigidbody2D>());
-                    }
-                }
-            }
-        }
-    }
 
   /*  void CheckPulleyInputs()
     {
