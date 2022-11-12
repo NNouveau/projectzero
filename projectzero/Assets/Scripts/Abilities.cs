@@ -12,9 +12,9 @@ public class Abilities : MonoBehaviour
     Movements mv;
     TrailRenderer Playertr;
     Rigidbody2D playerrb;
-
     bool isDashing;
     bool canDash;
+
     Vector2 direction;
 
     [Header("SwingRope")]
@@ -33,7 +33,7 @@ public class Abilities : MonoBehaviour
     {
         playerrb = GetComponent<Rigidbody2D>();
         Playertr = GetComponent<TrailRenderer>();
-        mv = GetComponent<Movements>();
+        mv = GetComponent<CharacterMovements>();
         hj = gameObject.GetComponent<HingeJoint2D>();
     }
 
