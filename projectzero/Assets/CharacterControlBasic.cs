@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using TMPro;
 
 public class CharacterControlBasic : MonoBehaviour
 {
@@ -13,13 +14,8 @@ public class CharacterControlBasic : MonoBehaviour
     
     public LayerMask groundLayer;
 
-    //Variables for Rope
-
-    public Rigidbody2D rbfr;
-    public bool attached = false;
-    public Transform attachedTo;
-    private GameObject disregard;
-    public GameObject pulleySelected = null;
+    public static int numberOfCoins;
+    public TextMeshProUGUI coinsText;
     
     //Codes and variables for character mechanic
 
@@ -47,6 +43,7 @@ public class CharacterControlBasic : MonoBehaviour
     void Update()
     {
 
+        coinsText.text = "Coins: " + numberOfCoins;
 
         direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLenght, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLenght, groundLayer);
