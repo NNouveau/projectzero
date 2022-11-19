@@ -16,23 +16,10 @@ public class CharacterControlBasic : MonoBehaviour
     //Variables for Rope
 
     public Rigidbody2D rbfr;
-    private HingeJoint2D hj;
-    public float RopePushForce= 10f;
     public bool attached = false;
     public Transform attachedTo;
     private GameObject disregard;
     public GameObject pulleySelected = null;
-    
-    //Code for rope mechanic
-
-    void Awake()
-    {
-        rbfr = gameObject.GetComponent<Rigidbody2D>();
-        hj   = gameObject.GetComponent<HingeJoint2D>();
-    }
-        
-
-
     
     //Codes and variables for character mechanic
 
@@ -70,20 +57,6 @@ public class CharacterControlBasic : MonoBehaviour
 
     }
 
-    //Codes for rope mechanic
-
-   
-
-
-
-  /*  void CheckPulleyInputs()
-    {
-        if(Input.GetMouseButtonDown(0))
-        {
-
-        }
-    }
-  */
 
     //For some optimization
     private void FixedUpdate()
