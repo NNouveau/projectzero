@@ -9,7 +9,7 @@ public class Abilities : MonoBehaviour
     [SerializeField] private float dashTime;
     [SerializeField] private int maxDash;
     [SerializeField] private int leftDash;
-    Movements mv;
+    CharacterMovements mv;
     TrailRenderer Playertr;
     Rigidbody2D playerrb;
     bool isDashing;
@@ -53,12 +53,12 @@ public class Abilities : MonoBehaviour
         canDash = leftDash > 0&&!isAttached;
         if (canDash && Input.GetKeyDown(KeyCode.F))
         {
-            dash(direction);
+            dash(direction,dashPow);
         }
         swingRope(direction);
     }
 
-    void dash(Vector2 direction)
+    void dash(Vector2 direction,float dashPow)
     {
         isDashing = true;
         Playertr.emitting = true;

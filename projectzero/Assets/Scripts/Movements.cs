@@ -38,14 +38,6 @@ public class Movements : MonoBehaviour
     [Header("Physics")]
     public float linearDrag = 4f;
 
-
-    
-
-
-    //For some optimization
-    
-
-
     //Running function
     public void run(float horizontal)
     {
