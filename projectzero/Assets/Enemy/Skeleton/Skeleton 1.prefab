@@ -45,8 +45,7 @@ GameObject:
   - component: {fileID: 6587012251653307969}
   - component: {fileID: 6587012251653307997}
   - component: {fileID: 6587012251653307998}
-  - component: {fileID: 6587012251653307996}
-  - component: {fileID: 6587012251653307999}
+  - component: {fileID: 3173453462750325338}
   m_Layer: 9
   m_Name: Skeleton 1
   m_TagString: Untagged
@@ -182,7 +181,7 @@ Animator:
   m_GameObject: {fileID: 6587012251653307974}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 26ba879607ec93f449627c3928fbe994, type: 2}
+  m_Controller: {fileID: 9100000, guid: cb9c0c6a12ad5934e9811ce2f00f865f, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -208,7 +207,7 @@ CircleCollider2D:
   m_Offset: {x: 0.04, y: -0.11664941}
   serializedVersion: 2
   m_Radius: 0.04335058
---- !u!114 &6587012251653307996
+--- !u!114 &3173453462750325338
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,41 +216,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 6587012251653307974}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93ad3cc226ee4b34783e2db442c62c9f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7dc9551c65d2a014f9e0f076f61be40b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: -40
-  mustPatrol: 0
-  mustFlip: 0
-  animator: {fileID: 6587012251653307997}
-  rb: {fileID: 6587012251653307968}
-  groundCheck: {fileID: 6587012252112547219}
-  ground:
+  rb: {fileID: 0}
+  animator: {fileID: 0}
+  groundLayer:
     serializedVersion: 2
-    m_Bits: 64
-  bodyCollider: {fileID: 6587012251653307969}
---- !u!114 &6587012251653307999
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6587012251653307974}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea19c5561bdd4c749b80328a92eff7a9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 6587012251653307997}
-  raycast: {fileID: 6587012250729851769}
-  raycastmask:
-    serializedVersion: 2
-    m_Bits: 8
-  hitbox: {fileID: 6587012252009370045}
-  raycastLenght: 6
-  attackDistance: 2
-  attackRate: 0
-  attackDamage: 35
+    m_Bits: 0
+  runSpeed: 2
+  jumpStr: 2
+  fallMultiplier: 4
+  gravity: 1
+  jumpDelay: 0
+  ACC: 2
+  DCC: 2
+  velPower: 1.2
+  velocity: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0}
+  onGround: 0
+  groundLenght: 0
+  colliderOffset: {x: 0, y: 0, z: 0}
+  linearDrag: 4
+  player: {fileID: 0}
+  agroRange: 2
 --- !u!1 &6587012252009370018
 GameObject:
   m_ObjectHideFlags: 0

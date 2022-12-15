@@ -23,9 +23,9 @@ public class CharacterMovements : Movements
     }
     private void FixedUpdate()
     {
+
         velocity.x = rb.velocity.x;
         velocity.y = rb.velocity.y;
-
 
         modifyPhysics();
         if (!gameObject.GetComponent<Abilities>().isAttached)

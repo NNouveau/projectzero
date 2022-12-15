@@ -12,8 +12,6 @@ public class Movements : MonoBehaviour
     public Animator animator;
     public LayerMask groundLayer;
 
-
-
     [Header("Movements")]
     [SerializeField] protected float runSpeed;
     [SerializeField] protected float jumpStr;
@@ -26,7 +24,7 @@ public class Movements : MonoBehaviour
 
     
     //private float jumpTimer;
-    private bool face = true;
+    protected bool face = true;
     public Vector3 velocity;
     public Vector2 direction;
 
@@ -37,6 +35,12 @@ public class Movements : MonoBehaviour
 
     [Header("Physics")]
     public float linearDrag = 4f;
+
+    protected void FixedUpdate()
+    {
+        velocity.x = rb.velocity.x;
+        velocity.y = rb.velocity.y;
+    }
 
     //Running function
     public void run(float horizontal)
