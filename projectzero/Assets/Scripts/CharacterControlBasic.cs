@@ -14,8 +14,7 @@ public class CharacterControlBasic : MonoBehaviour
     
     public LayerMask groundLayer;
 
-    public static int numberOfCoins;
-    public TextMeshProUGUI coinsText;
+    
     
     //Codes and variables for character mechanic
 
@@ -43,7 +42,7 @@ public class CharacterControlBasic : MonoBehaviour
     void Update()
     {
 
-        coinsText.text = "Coins: " + numberOfCoins;
+        
 
         direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLenght, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLenght, groundLayer);
