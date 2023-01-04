@@ -13,10 +13,20 @@ public class Shockwave : MonoBehaviour
     public float shockwaveMaxSize;
     Vector2 startScale;
     Vector2 maxScale;
-    // Start is called before the first frame update
+
+    [Header("Components")]
+    public GameObject player;
+    public CharacterCombat characterCombat;
+    public NecroCombat necroCombat;
+
+    private void Awake()
+    {
+        player = GameObject.Find("Player");
+        characterCombat = player.GetComponent<CharacterCombat>();
+        necroCombat = GameObject.FindGameObjectWithTag("Necromancer").GetComponent<NecroCombat>();
+    }
     void Start()
     {
-        
         isMaxSize = false;
         timer = 0f;
         startScale = transform.localScale;
@@ -42,5 +52,14 @@ public class Shockwave : MonoBehaviour
          transform.localScale = Vector3.Lerp(startScale, maxScale, timer / shockwaveRadiusGrowth);
          timer += Time.deltaTime;
     }
-    
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        float damage = necroCombat.shockwaveDamage;
+        if (collision.gameObject.tag=="Player"&&player.tag!="Invincible")
+        {
+            characterCombat.takeDamage(damage);
+        }
+    }
+
 }

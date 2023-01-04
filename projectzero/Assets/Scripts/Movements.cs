@@ -22,9 +22,9 @@ public class Movements : MonoBehaviour
     [SerializeField] protected float DCC;
     [SerializeField] protected float velPower;
 
-    
+
     //private float jumpTimer;
-    protected bool face = true;
+    [SerializeField] protected bool face = true;
     public Vector3 velocity;
     public Vector2 direction;
 
@@ -35,12 +35,6 @@ public class Movements : MonoBehaviour
 
     [Header("Physics")]
     public float linearDrag = 4f;
-
-    protected void FixedUpdate()
-    {
-        velocity.x = rb.velocity.x;
-        velocity.y = rb.velocity.y;
-    }
 
     //Running function
     public void run(float horizontal)

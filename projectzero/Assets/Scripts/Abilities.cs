@@ -24,6 +24,7 @@ public class Abilities : MonoBehaviour
     private GameObject disregard;
     private HingeJoint2D hj;
     public Transform attachedTo;
+    public GameObject player;
     
 
 
@@ -60,6 +61,7 @@ public class Abilities : MonoBehaviour
 
     void dash(Vector2 direction,float dashPow)
     {
+        gameObject.tag = "Invincible";
         isDashing = true;
         Playertr.emitting = true;
         leftDash -= 1;
@@ -72,6 +74,7 @@ public class Abilities : MonoBehaviour
         yield return new WaitForSeconds(dashTime);
         Playertr.emitting = false;
         isDashing = false;
+        gameObject.tag = "Player";
         playerrb.velocity = Vector2.zero;
     }
 

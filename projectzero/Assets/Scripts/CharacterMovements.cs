@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CharacterMovements : Movements
 {
+    public bool isRooted;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -19,6 +20,10 @@ public class CharacterMovements : Movements
         {
             //jumpTimer = Time.time + jumpDelay;
         }
+        if (isRooted)
+        {
+            rb.velocity = Vector2.zero;
+        }
 
     }
     private void FixedUpdate()
@@ -28,12 +33,12 @@ public class CharacterMovements : Movements
         velocity.y = rb.velocity.y;
 
         modifyPhysics();
-        if (!gameObject.GetComponent<Abilities>().isAttached)
+        if (!gameObject.GetComponent<Abilities>().isAttached&&!isRooted)
         {
             run(direction.x);
         }
 
-        if (Input.GetKey(KeyCode.W) && onGround) //(jumpTimer > Time.time && onGround)
+        if (Input.GetKey(KeyCode.W) && onGround&&!isRooted) //(jumpTimer > Time.time && onGround)
         {
             jump();
         }
