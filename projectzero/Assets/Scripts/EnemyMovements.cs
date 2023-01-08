@@ -6,6 +6,8 @@ public class EnemyMovements : Movements
 {
     public GameObject player;
     [SerializeField] protected float agroRange;
+    public bool isCloseUp;
+    
     float distanceToPlayer;
 
     // Start is called before the first frame update
@@ -14,12 +16,6 @@ public class EnemyMovements : Movements
         rb = GetComponent<Rigidbody2D>();
         player = GameObject.Find("Player");
         animator = GetComponent<Animator>();
-    }
-    
-    // Update is called once per frame
-    void Update()
-    {
-        followPlayer();
     }
 
     protected void followPlayer()
@@ -38,6 +34,29 @@ public class EnemyMovements : Movements
                 horizontal = -1;
             }
             run(horizontal);
+        }
+    }
+    protected void keepDistance()
+    {
+        distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+        if (distanceToPlayer < agroRange)
+        {
+            float horizontal = player.transform.position.x - transform.position.x;
+            isCloseUp = true;
+            if (horizontal > 0)
+            {
+                horizontal = -1;
+            }
+            else if (horizontal < 0)
+            {
+                horizontal = 1;
+            }
+            run(horizontal);
+        }
+        else
+        {
+            isCloseUp = false;
         }
     }
    

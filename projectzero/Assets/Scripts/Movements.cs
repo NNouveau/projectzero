@@ -24,7 +24,7 @@ public class Movements : MonoBehaviour
 
 
     //private float jumpTimer;
-    [SerializeField] protected bool face = true;
+    public bool face = true;
     public Vector3 velocity;
     public Vector2 direction;
 
@@ -35,17 +35,24 @@ public class Movements : MonoBehaviour
 
     [Header("Physics")]
     public float linearDrag = 4f;
+    private void FixedUpdate()
+    {
+        velocity.x = rb.velocity.x;
+        velocity.y = rb.velocity.y;
+        animator.SetFloat("HorizontalSpeed", Mathf.Abs(velocity.x));
+    }
 
     //Running function
     public void run(float horizontal)
     {
+        
         float targetSpeed = horizontal * runSpeed;
         float speedDif = targetSpeed - rb.velocity.x;
         float accelRate = (Mathf.Abs(targetSpeed) > 0.00f) ? ACC : DCC;
         float movement = Mathf.Pow(Mathf.Abs(speedDif) * accelRate, velPower) * Mathf.Sign(speedDif);
         rb.AddForce(movement * Vector2.right);
-
         animator.SetFloat("HorizontalSpeed", Mathf.Abs(velocity.x));
+
         if ((horizontal > 0 && !face) || (horizontal < 0 && face))
         {
             flip();
