@@ -4,29 +4,38 @@ using UnityEngine;
 
 public class Moving_Platform : MonoBehaviour
 {
-    public float speed;          // Speed value for platform
-    public int startingPoint;    // Starting position of the platform
-    public Transform[] points;   // An array for transform points
-
-    private int i;               // will be using for index of array
-    
+    public Transform pos1, pos2, startpos;
+    public float speed;
+    Vector3 nextpos;
     void Start()
     {
-        transform.position = points[startingPoint].position; // Deciding which point you want to start
+        nextpos = startpos.position;
     }
 
+    
     void Update()
     {
-        if (Vector2.Distance(transform.position, points[i].position) < 0.02f)
+        if(transform.position== pos1.position)
         {
-            i++;
-
-            if (i == points.Length)   // checking points to avoid  passing points.
-            {
-                i = 0;              // reset the index
-            }
+            nextpos = pos2.position;
         }
+        if (transform.position == pos2.position)
+        {
+            nextpos = pos1.position;
+        }
+        transform.position = Vector3.MoveTowards(transform.position, nextpos, speed * Time.deltaTime);
+    }
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(pos1.position, pos2.position);
+    }
 
-        transform.position = Vector2.MoveTowards(transform.position, points[i].position, speed * Time.deltaTime);
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        collision.transform.SetParent(transform);
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        collision.transform.SetParent(null);
     }
 }
