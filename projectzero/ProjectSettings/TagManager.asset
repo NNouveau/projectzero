@@ -5,12 +5,13 @@ TagManager:
   serializedVersion: 2
   tags:
   - Rope
-  - Platform
+  - Necromancer
+  - Invincible
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
   - Ground

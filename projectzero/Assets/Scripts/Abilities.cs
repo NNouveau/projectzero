@@ -9,12 +9,12 @@ public class Abilities : MonoBehaviour
     [SerializeField] private float dashTime;
     [SerializeField] private int maxDash;
     [SerializeField] private int leftDash;
-    Movements mv;
+    CharacterMovements mv;
     TrailRenderer Playertr;
     Rigidbody2D playerrb;
-
     bool isDashing;
     bool canDash;
+
     Vector2 direction;
 
     [Header("SwingRope")]
@@ -24,6 +24,7 @@ public class Abilities : MonoBehaviour
     private GameObject disregard;
     private HingeJoint2D hj;
     public Transform attachedTo;
+    public GameObject player;
     
 
 
@@ -33,7 +34,7 @@ public class Abilities : MonoBehaviour
     {
         playerrb = GetComponent<Rigidbody2D>();
         Playertr = GetComponent<TrailRenderer>();
-        mv = GetComponent<Movements>();
+        mv = GetComponent<CharacterMovements>();
         hj = gameObject.GetComponent<HingeJoint2D>();
     }
 
@@ -53,13 +54,14 @@ public class Abilities : MonoBehaviour
         canDash = leftDash > 0&&!isAttached;
         if (canDash && Input.GetKeyDown(KeyCode.F))
         {
-            dash(direction);
+            dash(direction,dashPow);
         }
         swingRope(direction);
     }
 
-    void dash(Vector2 direction)
+    void dash(Vector2 direction,float dashPow)
     {
+        gameObject.tag = "Invincible";
         isDashing = true;
         Playertr.emitting = true;
         leftDash -= 1;
@@ -72,6 +74,7 @@ public class Abilities : MonoBehaviour
         yield return new WaitForSeconds(dashTime);
         Playertr.emitting = false;
         isDashing = false;
+        gameObject.tag = "Player";
         playerrb.velocity = Vector2.zero;
     }
 
