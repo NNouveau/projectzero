@@ -8,7 +8,7 @@ public class CharacterMovements : Movements
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        groundLenght = .2f;
+        
     }
 
     void Update()
