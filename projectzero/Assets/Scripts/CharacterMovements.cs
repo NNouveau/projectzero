@@ -93,5 +93,9 @@ public class CharacterMovements : Movements
         {
             respawnPoint = transform.position;
         }
+        else if(collision.tag == "Trap")
+        {
+            transform.position = respawnPoint;
+        }
     }
 }
