@@ -7,6 +7,9 @@ TagManager:
   - Rope
   - Necromancer
   - Invincible
+  - Platform
+  - FallDetector
+  - CheckPoint
   layers:
   - Default
   - TransparentFX

@@ -5,10 +5,12 @@ using UnityEngine;
 public class CharacterMovements : Movements
 {
     public bool isRooted;
+    private Vector3 respawnPoint;
+    public GameObject fallDetector;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        
+        respawnPoint = transform.position;
     }
 
     void Update()
@@ -24,6 +26,8 @@ public class CharacterMovements : Movements
         {
             rb.velocity = Vector2.zero;
         }
+
+        //fallDetector.transform.position = new Vector2(fallDetector.transform.position.x, fallDetector.transform.position.y); // Setted static value. (If we're using just transoform.position x or y, it'll match player movement.)
 
     }
     private void FixedUpdate()
@@ -77,5 +81,17 @@ public class CharacterMovements : Movements
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(Vector2.up * jumpStr, ForceMode2D.Impulse);
         //jumpTimer = 0;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag == "FallDetector")
+        {
+            transform.position = respawnPoint;
+        }
+        else if (collision.tag == "CheckPoint")
+        {
+            respawnPoint = transform.position;
+        }
     }
 }
