@@ -7,6 +7,7 @@ public class CharacterMovements : Movements
     public bool isRooted;
     private Vector3 respawnPoint;
     public GameObject fallDetector;
+    public GameObject Section_2Pos;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -96,6 +97,11 @@ public class CharacterMovements : Movements
         else if(collision.tag == "Trap")
         {
             transform.position = respawnPoint;
+        }
+        else if(collision.gameObject.name == "Section_1Collider")
+        {
+            transform.position = Section_2Pos.transform.position;
+            respawnPoint = Section_2Pos.transform.position;
         }
     }
 }
