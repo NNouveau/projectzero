@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class CharacterMovements : Movements
 {
     public bool isRooted;
     private Vector3 respawnPoint;
     public GameObject fallDetector;
     public GameObject Section_2Pos;
+    public int numberOfCoins;
+    public TextMeshProUGUI coinsText;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -16,7 +18,7 @@ public class CharacterMovements : Movements
 
     void Update()
     {
-
+        coinsText.text = "Coins " + numberOfCoins;
         direction = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLenght, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLenght, groundLayer);
         if (Input.GetKey(KeyCode.W))
